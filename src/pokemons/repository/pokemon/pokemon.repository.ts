@@ -42,5 +42,12 @@ export class PokemonRepository {
       .skip(randomIndex)
       .exec();
   }
+
+  async findById(pokemonId: number): Promise<Pokemon | null> {
+    return this.pokemonModel.findOne({ id: pokemonId }).exec(); // Adjust field name if needed
+  }
+  async setOwned(beingCatchedId: number) {
+    return this.pokemonModel.updateOne({id: beingCatchedId, isOwned: true})
+  }
 }
  
