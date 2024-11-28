@@ -28,3 +28,4 @@ export class PokemonsController {
     return this.pokemonsService.getRandomOpponent();
   }
 }
+ 

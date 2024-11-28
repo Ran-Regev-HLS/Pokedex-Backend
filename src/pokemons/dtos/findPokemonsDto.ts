@@ -36,3 +36,4 @@ export class FindPokemonsDto {
   @Min(0)
   itemsPerPage: number = 0; 
 }
+ 

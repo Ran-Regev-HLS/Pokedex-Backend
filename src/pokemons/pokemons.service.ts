@@ -19,4 +19,4 @@ export class PokemonsService {
   async getRandomOpponent(){
     return this.pokemonRepo.getRandomUnownedPokemon();
   }
-}
+} 

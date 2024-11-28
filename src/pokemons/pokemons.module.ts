@@ -11,3 +11,4 @@ import { PokemonRepository } from './repository/pokemon/pokemon.repository';
   providers: [PokemonRepository, PokemonsService],
 })
 export class PokemonsModule {}
+ 

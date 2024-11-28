@@ -9,4 +9,4 @@ export const SORT_FIELD_MAPPING: Record<string, string> = {
     desc: -1,
   };
   
-  export const FILTER_PROPERTY_NAME = 'name.english';
+  export const FILTER_PROPERTY_NAME = 'name.english'; 

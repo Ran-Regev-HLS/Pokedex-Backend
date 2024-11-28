@@ -61,5 +61,5 @@ export class Pokemon extends Document {
   @Prop({ default: false })
   isOwned: boolean;
 }
-
+ 
 export const PokemonSchema = SchemaFactory.createForClass(Pokemon);
