@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema()
+@Schema({ collection: 'pokemons' })
 export class Pokemon extends Document {
   @Prop({ required: true })
   id: number;
@@ -12,9 +12,6 @@ export class Pokemon extends Document {
   })
   name: {
     english: string;
-    japanese: string;
-    chinese: string;
-    french: string;
   };
 
   @Prop({ required: true })
@@ -25,8 +22,6 @@ export class Pokemon extends Document {
     HP: number;
     Attack: number;
     Defense: number;
-    'Sp. Attack': number;
-    'Sp. Defense': number;
     Speed: number;
   };
 
@@ -35,12 +30,6 @@ export class Pokemon extends Document {
 
   @Prop()
   description: string;
-
-  @Prop({ type: Object })
-  evolution: {
-    prev?: [string, string];
-    next?: [string, string][];
-  };
 
   @Prop({ type: Object })
   profile: {
@@ -53,13 +42,11 @@ export class Pokemon extends Document {
 
   @Prop({ type: Object })
   image: {
-    sprite: string;
-    thumbnail: string;
     hires: string;
   };
 
   @Prop({ default: false })
   isOwned: boolean;
 }
- 
+
 export const PokemonSchema = SchemaFactory.createForClass(Pokemon);

@@ -16,7 +16,7 @@ export class FindPokemonsDto {
   @IsIn(Object.keys(SORT_FIELD_MAPPING), { 
     message: `sortField must be one of: ${Object.keys(SORT_FIELD_MAPPING).join(', ')}`,
   })
-  sortField: string = 'name.english'; 
+  sortField: string = 'name'; 
 
   @IsOptional()
   @IsIn(Object.keys(SORT_ORDER_MAPPING), {
