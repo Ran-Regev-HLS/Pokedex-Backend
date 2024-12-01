@@ -24,7 +24,12 @@ export const MAX_CATCH_ATTEMPTS = 3;
 export enum FightStatus {
     PRE_FIGHT = "READY",
     IN_FIGHT = "IN FIGHT",
-    FINISHED = "FINISHED",
+    WON = "WON",
+    LOST = "LOST",
+}
+export enum ATTACKER {
+    PC = "PC",
+    USER = "USER",
 }
 
 export enum AttackOutcome {

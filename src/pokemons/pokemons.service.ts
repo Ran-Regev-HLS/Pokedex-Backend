@@ -20,7 +20,7 @@ export class PokemonsService {
     return this.pokemonRepo.getRandomUnownedPokemon();
   }
 
-  findById(pokemonId: number) {
-    return this.findById(pokemonId);
+  async findById(pokemonId: number){
+    return this.pokemonRepo.findById(pokemonId);
   }
 }
