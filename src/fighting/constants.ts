@@ -13,8 +13,6 @@ export const BASE_ATTACK_DAMAGE = 20;
 
 export const ATTACK_DEFENCE_DIFF_FACTOR = 0.5;
 
-export const MAX_HP = 100;
-
 export const BASE_CATCH_RATE = 0.1;
 
 export const LOW_HP_RATION_THRESHOLD = 0.2;

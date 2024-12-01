@@ -1,7 +1,19 @@
-import { Controller, Get, Logger, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Logger,
+  NotFoundException,
+  Query,
+} from '@nestjs/common';
 import { PokemonsService } from './pokemons.service';
 import { FindPokemonsDto } from './dtos/findPokemonsDto';
-import { FILTER_PROPERTY_NAME, SORT_FIELD_MAPPING, SORT_ORDER_MAPPING } from './constants';
+import {
+  FILTER_PROPERTY_NAME,
+  SORT_FIELD_MAPPING,
+  SORT_ORDER_MAPPING,
+} from './constants';
+import { FilterQuery } from 'mongoose';
+import { Pokemon } from './schemas/pokemon.schema';
 
 @Controller('pokemons')
 export class PokemonsController {
@@ -9,30 +21,43 @@ export class PokemonsController {
 
   @Get()
   async findAll(@Query() query: FindPokemonsDto) {
-    const { search, isOwned, sortField, sortOrder, page, itemsPerPage } = query;
-    const filters: any = {};
-    if (search) filters[FILTER_PROPERTY_NAME] = { $regex: search, $options: 'i' };
+    const { search, isOwned, sortField, sortOrder, startIndex, limit } = query;
 
-    const sort = { [SORT_FIELD_MAPPING[sortField] ]: SORT_ORDER_MAPPING[sortOrder] };
-    Logger.debug("getting filtered pokemons")
+    const filters: FilterQuery<Pokemon> = {};
+    if (search)
+      filters[FILTER_PROPERTY_NAME] = { $regex: search, $options: 'i' };
+    if (isOwned) filters['isOwned'] = isOwned === 'true';
+
+    const sort:Record<string, 1 | -1> = {
+      [SORT_FIELD_MAPPING[sortField]]: SORT_ORDER_MAPPING[sortOrder],
+    };
+
+    Logger.log('Getting filtered Pokemon');
     try {
-      const results =  await this.pokemonsService.getFilteredPokemons(
+      const results = await this.pokemonsService.getFilteredPokemons(
         filters,
         sort,
-        page,
-        itemsPerPage,
+        startIndex,
+        limit,
       );
-      Logger.debug(`succesfully retrived ${results.total} results`)
+      results.data.length === 0
+        ? Logger.log(`No Pokemons were found`)
+        : Logger.log(`Successfully retrieved ${results.total} results`);
       return results;
     } catch (error) {
-      Logger.error("couldnt retrive pokemons")
+      Logger.error('Could not retrieve Pokemon', error.stack);
+      throw error;
     }
-    
-    
   }
+
   @Get('/random-opponent')
   async findRandomOpponent() {
-    return await this.pokemonsService.getRandomOpponent();
+    const opponent = await this.pokemonsService.getRandomOpponent();
+    if (!opponent) {
+      Logger.error('No unowned Pokemon found');
+      throw new NotFoundException('No unowned Pokemon found');
+    }
+    return opponent;
   }
+
 }
- 

@@ -1,20 +1,29 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { FightStatus } from "../constants";
+import { FightStatus } from '../constants';
 
-@Schema()
+@Schema({ collection: 'fighting', timestamps: true })
 export class Fighting extends Document {
   @Prop({ required: true })
-  pokemon1id: number;
+  pcPokemonId: number; 
 
   @Prop({ required: true })
-  pokemon2id: number;
+  pcPokemonHP: number; 
+
+  @Prop({
+    type: [Object],
+    required: true,
+  })
+  userPokemons: {
+    pokemonId: number; 
+    hp: number; 
+  }[]; 
 
   @Prop({ required: true })
-  hp1: number;
+  currentActivePokemonId: number; 
 
   @Prop({ required: true })
-  hp2: number;
+  currentActivePokemonHP: number; 
 
   @Prop({
     type: String,
@@ -24,10 +33,7 @@ export class Fighting extends Document {
   status: FightStatus;
 
   @Prop({ required: true })
-  catchAttempts1: number;
-
-  @Prop({ required: true })
-  catchAttempts2: number;
+  catchAttempts: number; 
 }
 
 export const FightingSchema = SchemaFactory.createForClass(Fighting);
