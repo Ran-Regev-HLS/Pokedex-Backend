@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Body, Param, Logger } from '@nestjs/common';
 import { FightingService } from './fighting.service';
-import { AttackDto, CatchDto, CreateFightingDto } from './dtos/fighting.dto';
 import { Fighting } from './schemas/fighting.schema';
 import { AttackOutcome, CatchOutcome } from './constants';
 

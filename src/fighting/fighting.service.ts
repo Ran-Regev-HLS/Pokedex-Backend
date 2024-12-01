@@ -3,7 +3,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { AttackDto, CatchDto, CreateFightingDto } from './dtos/fighting.dto';
 import { FightingRepository } from './fighting.repository';
 import { Fighting } from './schemas/fighting.schema';
 import {
