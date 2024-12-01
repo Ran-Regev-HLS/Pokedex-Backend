@@ -41,3 +41,21 @@ function getRandomFactor(): number {
     const { MIN, MAX } = RANDOM_ATTACK_MULTIPLIER;
     return Math.random() * (MAX - MIN) + MIN;
 }
+
+
+
+
+function calculateCatchRate(currentHP: number, BaseHP: number): number {
+    let catchRate = BASE_CATCH_RATE;
+    if(currentHP < LOW_HP_RATION_THRESHOLD * BaseHP){
+        catchRate += LOW_HP_CATCH_RATE_BONUS;
+    }
+    return Math.min(catchRate, 1); 
+}
+
+export function attemptCatch(opponentHp: number, BaseHP: number): boolean{
+    const randomValue = Math.random();
+    const catchRate = calculateCatchRate(opponentHp,BaseHP);
+    return randomValue <= catchRate ;
+}
+

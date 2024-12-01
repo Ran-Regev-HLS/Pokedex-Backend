@@ -23,4 +23,8 @@ export class PokemonsService {
   async findById(pokemonId: number){
     return this.pokemonRepo.findById(pokemonId);
   }
+
+  async setOwned(pokemonId: number) {
+    return this.pokemonRepo.setOwned(pokemonId)
+  }
 }

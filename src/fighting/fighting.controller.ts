@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Logger, Query } from '@nestjs/common';
+import { Controller, Post, Param, Logger, Query } from '@nestjs/common';
 import { FightingService } from './fighting.service';
 import { Fighting } from './schemas/fighting.schema';
 import { AttackOutcome, CatchOutcome } from './constants';
@@ -35,4 +35,19 @@ export class FightingController {
       Logger.error('Could not calculate attack', error.stack);
     }
   }
+
+  @Post(':id/catch')
+  async catch(
+    @Param('id') fightId: string,
+  ): Promise<{fight:Fighting, outcome: CatchOutcome}> {
+    Logger.log(`Processing catch for fight ${fightId}`)
+    try {
+      const fight = await this.fightingService.processCatch(fightId);
+      Logger.log(`Successfully calculated catch with result ${fight.outcome}`)
+      return fight;
+    } catch (error) {
+      Logger.error('Could not calculate catch', error.stack);
+    } 
+  }
+
 }
