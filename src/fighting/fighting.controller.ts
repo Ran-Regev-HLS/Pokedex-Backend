@@ -2,7 +2,7 @@ import { Controller, Post, Param, Logger, Query } from '@nestjs/common';
 import { FightingService } from './fighting.service';
 import { Fighting } from './schemas/fighting.schema';
 import { AttackOutcome, CatchOutcome } from './constants';
-import { AttackDto } from './dtos/fighting.dto';
+import { AttackDto, SwitchPokemonDto } from './dtos/fighting.dto';
 
 @Controller('fighting')
 export class FightingController {
@@ -48,6 +48,22 @@ export class FightingController {
     } catch (error) {
       Logger.error('Could not calculate catch', error.stack);
     } 
+  }
+
+  @Post(':id/switch-pokemon')
+  async switchPokemon(
+    @Param('id') fightId: string,
+    @Query() switchPokemonDto: SwitchPokemonDto,
+  ): Promise<Fighting> {
+    Logger.log(`Switching active pokmon in fight ${fightId}`);
+    try {
+      const updatedFight = await this.fightingService.switchActivePokemon(fightId, switchPokemonDto);
+      Logger.log(`Successfully switched pokemon for fight ${fightId}`);
+      return updatedFight;
+    } catch (error) {
+      Logger.error('Could not switch active pokemon', error.stack);
+      throw error;
+    }
   }
 
 }
