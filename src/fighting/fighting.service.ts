@@ -116,9 +116,9 @@ export class FightingService {
 
     const updates: Partial<Fighting> = { [defenderHpKey]: newDefenderHp };
     if (newDefenderHp === 0) {
-      ATTACKER.USER
-        ? (updates.status = FightStatus.WON)
-        : (updates.status = FightStatus.LOST);
+      attackerIdentifier === ATTACKER.USER
+        ? updates.status = FightStatus.WON
+        : updates.status = FightStatus.LOST;
     } else {
       updates.status = FightStatus.IN_FIGHT;
     }
