@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { profile } from 'console';
 import { FilterQuery, Model } from 'mongoose';
-import { Pokemon } from 'src/pokemons/schemas/pomemon.schema';
+import { Pokemon } from 'src/pokemons/schemas/pokemon.schema';
 
 @Injectable()
 export class PokemonRepository {
@@ -12,29 +13,26 @@ export class PokemonRepository {
   async findWithFilters(
     filters: FilterQuery<Pokemon>,
     sort: Record<string, 1 | -1>,
-    page: number,
-    itemsPerPage: number,
+    startIndex: number,
+    limit: number,
   ): Promise<{ data: Pokemon[]; total: number }> {
-    const skip = page * itemsPerPage;
     const total = await this.pokemonModel.countDocuments(filters).exec();
     const data = await this.pokemonModel
       .find(filters)
       .sort(sort)
-      .skip(skip)
-      .limit(itemsPerPage)
+      .skip(startIndex)
+      .limit(limit)
       .lean<Pokemon[]>();
-
+  
     return { data, total };
   }
 
   async getRandomUnownedPokemon(): Promise<Pokemon | null> {
-    const count = await this.pokemonModel.countDocuments({ isOwned: false });
-
-    if (count === 0) {
-      throw new NotFoundException('No unowned Pokemon found');
-    }
-
-    const randomIndex = Math.floor(Math.random() * count);
-    return this.pokemonModel.findOne({ isOwned: false }).skip(randomIndex);
+    const result = await this.pokemonModel.aggregate([
+      { $match: { isOwned: false } },
+      { $sample: { size: 1 } },
+    ]);
+    return result[0] || null;
   }
+
 }

@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsBooleanString, IsIn, IsInt, Min } from 'class-validator';
+import { IsOptional, IsString, IsBooleanString, IsIn, IsInt, Min, IsEnum } from 'class-validator';
 import { SORT_FIELD_MAPPING, SORT_ORDER_MAPPING } from '../constants';
 import { Transform } from 'class-transformer';
 
@@ -13,27 +13,26 @@ export class FindPokemonsDto {
 
   @IsOptional()
   @IsString()
-  @IsIn(Object.keys(SORT_FIELD_MAPPING), { 
+  @IsEnum(Object.keys(SORT_FIELD_MAPPING), {
     message: `sortField must be one of: ${Object.keys(SORT_FIELD_MAPPING).join(', ')}`,
   })
-  sortField: string = 'name'; 
+  sortField: string = 'name';
 
   @IsOptional()
-  @IsIn(Object.keys(SORT_ORDER_MAPPING), {
+  @IsEnum(Object.keys(SORT_ORDER_MAPPING), {
     message: `sortOrder must be one of: ${Object.keys(SORT_ORDER_MAPPING).join(', ')}`,
   })
-  sortOrder: string = 'asc'; 
+  sortOrder: string = 'asc';
 
   @IsOptional()
-  @Transform(({ value }) => parseInt(value, 10)) 
+  @Transform(({ value }) => parseInt(value, 10))
   @IsInt()
   @Min(0)
-  page: number = 0; 
+  startIndex: number = 0;
 
   @IsOptional()
-  @Transform(({ value }) => parseInt(value, 10)) 
+  @Transform(({ value }) => parseInt(value, 10))
   @IsInt()
   @Min(0)
-  itemsPerPage: number = 0; 
+  limit: number = 0; 
 }
- 
