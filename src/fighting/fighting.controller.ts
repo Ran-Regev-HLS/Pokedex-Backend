@@ -3,6 +3,7 @@ import { FightingService } from './fighting.service';
 import { Fighting } from './schemas/fighting.schema';
 import { AttackOutcome, CatchOutcome } from './constants';
 import { AttackDto } from './dtos/fighting.dto';
+import { ObjectId } from 'mongoose';
 
 @Controller('fighting')
 export class FightingController {

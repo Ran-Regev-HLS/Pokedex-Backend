@@ -15,6 +15,7 @@ import {
 import { PokemonsService } from 'src/pokemons/pokemons.service';
 import { AttackDto } from './dtos/fighting.dto';
 import { calculateAttack, getAttackerId, getDefenderHpKey } from './utils';
+import { ObjectId, Types } from 'mongoose';
 
 @Injectable()
 export class FightingService {
@@ -34,11 +35,11 @@ export class FightingService {
     }
     const userPokemonsId = [];
     for (const pokemon of userPokemons.data) {
-      userPokemonsId.push({ pokemonId: pokemon.id, hp: pokemon.hp });
+      userPokemonsId.push({ pokemonId: pokemon._id, hp: pokemon.hp }); 
     }
 
     const data: Partial<Fighting> = {
-      pcPokemonId: pcPokemon.id,
+      pcPokemonId: pcPokemon._id,
       pcPokemonHP: pcPokemon.hp,
       userPokemons: userPokemonsId,
       currentActivePokemonId: userPokemonsId[0].pokemonId,
@@ -64,7 +65,7 @@ export class FightingService {
     attackDto: AttackDto,
   ): Promise<{ fight: Fighting; outcome: AttackOutcome, damageDealt: number}> {
     const { attacker: attackerIdentifier } = attackDto;
-
+    
     const currBattle = await this.fightingRepository.findOne(fightId);
     if (!currBattle) {
       throw new NotFoundException(`Battle with ID ${fightId} not found`);
@@ -82,6 +83,7 @@ export class FightingService {
     if (!attacker || !defender) {
       throw new NotFoundException(`couldnt retrive attacker or defender`);
     }
+    
 
     const defenderHpKey = getDefenderHpKey(attackerIdentifier);
     const defenderCurrentHp = attackerIdentifier === ATTACKER.USER ? currBattle.pcPokemonHP : currBattle.currentActivePokemonHP;
