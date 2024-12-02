@@ -16,7 +16,7 @@ export class FightingController {
       return fight;
     } catch (error) {
       Logger.error('Could not create fight', error.stack);
-      throw error;
+      throw new Error(error);
     }
   }
 }

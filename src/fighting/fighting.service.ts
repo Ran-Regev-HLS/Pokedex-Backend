@@ -26,7 +26,7 @@ export class FightingService {
     if(!pcPokemon){
       throw new NotFoundException("couldnt get an opponent pokemon")
     }
-    const userPokemons = await this.pokemonService.getFilteredPokemons({ isOwned: true }, {}, 0, 0)
+    const userPokemons = await this.pokemonService.getFilteredPokemons({ isOwned: true })
     if(!userPokemons.total){ 
       throw new NotFoundException("user doesnt have pokemons")
     }
