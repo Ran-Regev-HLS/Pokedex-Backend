@@ -10,15 +10,17 @@ import {
   AttackOutcome,
   CatchOutcome,
   FightStatus,
+  FightStatusFinished,
   MAX_CATCH_ATTEMPTS,
 } from './constants';
 import { PokemonsService } from 'src/pokemons/pokemons.service';
 import { AttackDto } from './dtos/fighting.dto';
-import { calculateAttack, getAttackerId, getDefenderHpKey } from './utils';
+import { attemptCatch, calculateAttack, getAttackerId, getDefenderHpKey } from './utils';
 import { ObjectId, Types } from 'mongoose';
 
 @Injectable()
 export class FightingService {
+  
   constructor(
     private readonly fightingRepository: FightingRepository,
     private readonly pokemonService: PokemonsService,
@@ -70,7 +72,7 @@ export class FightingService {
     if (!currBattle) {
       throw new NotFoundException(`Battle with ID ${fightId} not found`);
     }
-    if (currBattle.status === FightStatus.WON || currBattle.status === FightStatus.LOST) {
+    if (FightStatusFinished.includes(currBattle.status)) {
       throw new BadRequestException(`Battle with ID ${fightId} is not ongoing`);
     }
     //get attacker/defender based on attacker identifier input
@@ -112,8 +114,46 @@ export class FightingService {
 
     return { fight: updatedFight, outcome: attackOutcome, damageDealt: damageDealt };
   }
-  
-      
+
+
+  async processCatch(
+    fightId: string,
+  ): Promise<{ fight: Fighting; outcome: CatchOutcome }> {
+
+    const currBattle = await this.fightingRepository.findOne(fightId);
+    if (!currBattle) {
+      throw new NotFoundException(`Fight with ID ${fightId} not found`);
+    }
+    if (FightStatusFinished.includes(currBattle.status)) {
+      throw new BadRequestException(`Fight with ID ${fightId} is not ongoing`);
+    }
+
+    const pcPokemon = await this.pokemonService.findById(currBattle.pcPokemonId);
+    if (!pcPokemon) {
+      throw new NotFoundException(`Couldnt get pc pokemon`);
+    }
+
+    const isCatchSuccessful = attemptCatch(currBattle.pcPokemonHP, pcPokemon.hp);
+    let catchOutcome;
+
+    const updates: Partial<Fighting> = {["catchAttempts"]: currBattle.catchAttempts - 1};
+
+    if (isCatchSuccessful) {
+      await this.pokemonService.setOwned(currBattle.pcPokemonId);
+      catchOutcome = CatchOutcome.CAUGHT;
+      updates.status = FightStatus.CAUGHT;
+    } else if (currBattle.catchAttempts - 1 === 0) {
+      updates.status = FightStatus.FLED;
+      catchOutcome = CatchOutcome.FLED;
+    } else {
+      catchOutcome = CatchOutcome.MISSED;
+    }
+
+    const updatedFight = await this.fightingRepository.update(fightId, updates);
+
+    return { fight: updatedFight, outcome: catchOutcome };
+  }
+
 }
 
 

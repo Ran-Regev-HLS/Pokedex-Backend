@@ -26,7 +26,12 @@ export enum FightStatus {
     IN_FIGHT = "IN FIGHT",
     WON = "WON",
     LOST = "LOST",
+    FLED = "FLED",
+    CAUGHT = "CAUGHT",
 }
+
+export const FightStatusFinished = [FightStatus.WON, FightStatus.LOST, FightStatus.FLED, FightStatus.CAUGHT];
+
 export enum ATTACKER {
     PC = "PC",
     USER = "USER",
