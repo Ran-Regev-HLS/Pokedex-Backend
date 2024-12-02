@@ -1,6 +1,8 @@
-import { Transform } from 'class-transformer';
-import { IsString, IsInt, Min, IsEnum } from 'class-validator';
+import { IsString, IsInt, Min, IsEnum, IsNumber } from 'class-validator';
 import { ATTACKER } from '../constants';
+import { Transform } from 'class-transformer';
+import { ObjectId, Types } from 'mongoose';
+
 
 export class AttackDto {
 
@@ -10,3 +12,8 @@ export class AttackDto {
   attacker: ATTACKER;
 }
 
+export class SwitchPokemonDto{
+  @IsString()
+  newPokemonId: Types.ObjectId;
+
+}

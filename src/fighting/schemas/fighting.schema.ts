@@ -14,6 +14,7 @@ export class Fighting extends Document {
     {
       pokemonId: { type: Types.ObjectId, ref: 'Pokemon' },
       hp: Number,
+      _id: false,
     },
   ])
   userPokemons: Array<{ pokemonId: Types.ObjectId; hp: number }>;
