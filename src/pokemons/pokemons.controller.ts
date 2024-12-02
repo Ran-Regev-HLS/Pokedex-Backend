@@ -12,6 +12,8 @@ import {
   SORT_FIELD_MAPPING,
   SORT_ORDER_MAPPING,
 } from './constants';
+import { FilterQuery } from 'mongoose';
+import { Pokemon } from './schemas/pokemon.schema';
 
 @Controller('pokemons')
 export class PokemonsController {
@@ -21,12 +23,12 @@ export class PokemonsController {
   async findAll(@Query() query: FindPokemonsDto) {
     const { search, isOwned, sortField, sortOrder, startIndex, limit } = query;
 
-    const filters: any = {};
+    const filters: FilterQuery<Pokemon> = {};
     if (search)
       filters[FILTER_PROPERTY_NAME] = { $regex: search, $options: 'i' };
     if (isOwned) filters['isOwned'] = isOwned === 'true';
 
-    const sort = {
+    const sort:Record<string, 1 | -1> = {
       [SORT_FIELD_MAPPING[sortField]]: SORT_ORDER_MAPPING[sortOrder],
     };
 
@@ -38,12 +40,14 @@ export class PokemonsController {
         startIndex,
         limit,
       );
-      results.data.length === 0
-        ? Logger.log(`No Pokemons were found`)
-        : Logger.log(`Successfully retrieved ${results.total} results`);
+      if (!results.data.length) {
+        Logger.warn('No Pokemons were found');
+      } else {
+        Logger.log(`Successfully retrieved ${results.total} results`);
+      }
       return results;
     } catch (error) {
-      Logger.error('Could not retrieve Pokemon', error.stack);
+      Logger.error('Could not retrieve Pokemon', error);
       throw error;
     }
   }
@@ -56,5 +60,4 @@ export class PokemonsController {
     }
     return opponent;
   }
-
 }
