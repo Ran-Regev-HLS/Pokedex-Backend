@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { Fighting } from './schemas/fighting.schema';
 
 @Injectable()
@@ -17,19 +17,19 @@ export class FightingRepository {
     return this.fightingModel.find().lean<Fighting[]>();
   }
 
-  async findOne(id: string): Promise<Fighting | null> {
+  async findOne(id: ObjectId): Promise<Fighting | null> {
     return this.fightingModel.findById(id).lean<Fighting>();
   }
 
   async update(
-    id: string,
+    id: ObjectId,
     updateData: Partial<Fighting>,
   ): Promise<Fighting | null> {
     return this.fightingModel
       .findByIdAndUpdate(id, updateData, { new: true }).lean<Fighting>()
   }
 
-  async remove(id: string): Promise<Fighting | null> {
+  async remove(id: ObjectId): Promise<Fighting | null> {
     return this.fightingModel.findByIdAndDelete(id).lean<Fighting>();
   }
 }

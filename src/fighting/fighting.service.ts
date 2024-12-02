@@ -12,6 +12,7 @@ import {
   MAX_CATCH_ATTEMPTS,
 } from './constants';
 import { PokemonsService } from 'src/pokemons/pokemons.service';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class FightingService {
@@ -32,11 +33,11 @@ export class FightingService {
     }
     const userPokemonsId = [];
     for (const pokemon of userPokemons.data) {
-      userPokemonsId.push({ pokemonId: pokemon.id, hp: pokemon.hp }); 
+      userPokemonsId.push({ pokemonId: pokemon._id, hp: pokemon.hp }); 
     }
 
     const data: Partial<Fighting> = {
-      pcPokemonId: pcPokemon.id,
+      pcPokemonId: pcPokemon._id,
       pcPokemonHP: pcPokemon.hp,
       userPokemons: userPokemonsId,
       currentActivePokemonId: userPokemonsId[0].pokemonId,
