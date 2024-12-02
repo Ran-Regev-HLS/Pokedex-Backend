@@ -3,6 +3,7 @@ import { Pokemon } from "src/pokemons/schemas/pokemon.schema";
 import { ATTACK_DEFENCE_DIFF_FACTOR, ATTACKER, BASE_ATTACK_DAMAGE, BASE_MISS_CHANCE, MISS_ACCURACY_FACTOR, MISS_SPEED_FACTOR, RANDOM_ATTACK_MULTIPLIER } from "./constants";
 import { BASE_CATCH_RATE, LOW_HP_CATCH_RATE_BONUS, LOW_HP_RATION_THRESHOLD } from "./constants";
 import { Fighting } from "./schemas/fighting.schema";
+import { ObjectId } from "mongoose";
 
 export function calculateAttack(
     attacker: Pokemon,
@@ -47,4 +48,8 @@ export function getDefenderHpKey(attackerIdentifier: ATTACKER):keyof Fighting{
     return attackerIdentifier === ATTACKER.USER
         ? 'pcPokemonHP'
         : 'currentActivePokemonHP';
+  }
+
+  export function getAttackerId(isAttackerPC:boolean, fight: Fighting):number{
+   return isAttackerPC ? fight.pcPokemonId : fight.currentActivePokemonId;
   }
