@@ -17,12 +17,12 @@ export class FightingRepository {
     return this.fightingModel.find().lean<Fighting[]>();
   }
 
-  async findOne(id: ObjectId): Promise<Fighting | null> {
+  async findOne(id: string): Promise<Fighting | null> {
     return this.fightingModel.findById(id).lean<Fighting>();
   }
 
   async update(
-    id: ObjectId,
+    id: string,
     updateData: Partial<Fighting>,
   ): Promise<Fighting | null> {
     return this.fightingModel
