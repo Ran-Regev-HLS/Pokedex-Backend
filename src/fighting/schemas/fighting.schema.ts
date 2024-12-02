@@ -30,6 +30,8 @@ export class Fighting extends Document {
 
   @Prop()
   catchAttempts: number;
+
+  readonly _id:Types.ObjectId;
 }
 
 export const FightingSchema = SchemaFactory.createForClass(Fighting);
