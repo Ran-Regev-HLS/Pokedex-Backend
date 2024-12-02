@@ -40,12 +40,14 @@ export class PokemonsController {
         startIndex,
         limit,
       );
-      results.data.length === 0
-        ? Logger.log(`No Pokemons were found`)
-        : Logger.log(`Successfully retrieved ${results.total} results`);
+      if (!results.data.length) {
+        Logger.warn('No Pokemons were found');
+      } else {
+        Logger.log(`Successfully retrieved ${results.total} results`);
+      }
       return results;
     } catch (error) {
-      Logger.error('Could not retrieve Pokemon', error.stack);
+      Logger.error('Could not retrieve Pokemon', error);
       throw error;
     }
   }
@@ -59,5 +61,4 @@ export class PokemonsController {
     }
     return opponent;
   }
-
 }

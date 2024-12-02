@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 @Schema()
 export class Pokemon extends Document {
@@ -51,6 +51,9 @@ export class Pokemon extends Document {
 
   @Prop({ default: false })
   isOwned: boolean;
+
+  readonly _id:Types.ObjectId;
+
 }
 
 export const PokemonSchema = SchemaFactory.createForClass(Pokemon);

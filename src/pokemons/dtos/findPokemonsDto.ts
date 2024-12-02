@@ -13,14 +13,14 @@ export class FindPokemonsDto {
 
   @IsOptional()
   @IsString()
-  @IsEnum(Object.keys(SORT_FIELD_MAPPING), {
-    message: `sortField must be one of: ${Object.keys(SORT_FIELD_MAPPING).join(', ')}`,
+  @IsEnum((SORT_FIELD_MAPPING), {
+    message: `sortField must be one of:${Object.values(SORT_FIELD_MAPPING).join(', ')}`,
   })
   sortField: string = 'name';
 
   @IsOptional()
   @IsEnum(Object.keys(SORT_ORDER_MAPPING), {
-    message: `sortOrder must be one of: ${Object.keys(SORT_ORDER_MAPPING).join(', ')}`,
+    message: `sortOrder must be one of: ${Object.keys(SORT_ORDER_MAPPING).join(', ')}}`,
   })
   sortOrder: string = 'asc';
 

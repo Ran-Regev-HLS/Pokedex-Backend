@@ -1,17 +1,19 @@
 import { IsString, IsInt, Min, IsEnum, IsNumber } from 'class-validator';
 import { ATTACKER } from '../constants';
 import { Transform } from 'class-transformer';
+import { ObjectId, Types } from 'mongoose';
 
 
 export class AttackDto {
-  @IsEnum(Object.keys(ATTACKER), {
-    message: `Attacker idendifier must be one of: ${Object.keys(ATTACKER).join(', ')}`,
+
+  @IsEnum((ATTACKER), {
+    message: `Attacker idendifier must be one of: ${Object.values(ATTACKER).join(', ')}`,
   })
   attacker: ATTACKER;
 }
 
 export class SwitchPokemonDto{
-  @Transform(({ value }) => parseInt(value, 10))
-  @IsNumber()
-  newPokemonId: number;
+  @IsString()
+  newPokemonId: Types.ObjectId;
+
 }

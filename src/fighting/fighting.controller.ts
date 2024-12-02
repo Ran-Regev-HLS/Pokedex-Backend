@@ -3,6 +3,7 @@ import { FightingService } from './fighting.service';
 import { Fighting } from './schemas/fighting.schema';
 import { AttackOutcome, CatchOutcome } from './constants';
 import { AttackDto, SwitchPokemonDto } from './dtos/fighting.dto';
+import { ObjectId } from 'mongoose';
 
 @Controller('fighting')
 export class FightingController {
@@ -16,8 +17,8 @@ export class FightingController {
       Logger.log(`Successfully created fight ${fight.id}`);
       return fight;
     } catch (error) {
-      Logger.error('Could not create fight', error.stack);
-      throw error;
+      Logger.error('Could not create fight', error);
+      throw new Error(error);
     }
   }
 
@@ -32,7 +33,8 @@ export class FightingController {
       Logger.log(`Successfully calculated attack with result ${fight.outcome}`)
       return fight;
     } catch (error) {
-      Logger.error('Could not calculate attack', error.stack);
+      Logger.error('Could not calculate attack', error);
+      throw new Error(error);
     }
   }
 
