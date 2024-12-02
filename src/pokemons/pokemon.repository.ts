@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, ObjectId, Types } from 'mongoose';
 import { Pokemon } from 'src/pokemons/schemas/pokemon.schema';
 
 @Injectable()
@@ -34,10 +34,10 @@ export class PokemonRepository {
     return result[0] || null;
   }
 
-  async findById(pokemonId: number): Promise<Pokemon | null> {
-    return this.pokemonModel.findOne({ id: pokemonId }); 
+  async findById(pokemonId: Types.ObjectId): Promise<Pokemon | null> {
+    return this.pokemonModel.findById(pokemonId);
   }
-  async setOwned(pokemonId: number) {
-    return this.pokemonModel.updateOne({id: pokemonId, isOwned: true})
+  async setOwned(beingCatchedId: Types.ObjectId) {
+    return this.pokemonModel.findByIdAndUpdate(beingCatchedId,{isOwned: true}, { new: true })
   }
 }
