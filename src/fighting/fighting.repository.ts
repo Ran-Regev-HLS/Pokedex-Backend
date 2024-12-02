@@ -10,8 +10,7 @@ export class FightingRepository {
   ) {}
 
   async create(data: Partial<Fighting>): Promise<Fighting> {
-    const fighting = new this.fightingModel(data);
-    return fighting.save();
+    return this.fightingModel.create(data);
   }
 
   async findAll(): Promise<Fighting[]> {

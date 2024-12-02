@@ -1,7 +1,8 @@
 
 import { Pokemon } from "src/pokemons/schemas/pokemon.schema";
-import { ATTACK_DEFENCE_DIFF_FACTOR, BASE_ATTACK_DAMAGE, BASE_MISS_CHANCE, MISS_ACCURACY_FACTOR, MISS_SPEED_FACTOR, RANDOM_ATTACK_MULTIPLIER } from "./constants";
+import { ATTACK_DEFENCE_DIFF_FACTOR, ATTACKER, BASE_ATTACK_DAMAGE, BASE_MISS_CHANCE, MISS_ACCURACY_FACTOR, MISS_SPEED_FACTOR, RANDOM_ATTACK_MULTIPLIER } from "./constants";
 import { BASE_CATCH_RATE, LOW_HP_CATCH_RATE_BONUS, LOW_HP_RATION_THRESHOLD } from "./constants";
+import { Fighting } from "./schemas/fighting.schema";
 
 export function calculateAttack(
     attacker: Pokemon,
@@ -41,3 +42,9 @@ function getRandomFactor(): number {
     const { MIN, MAX } = RANDOM_ATTACK_MULTIPLIER;
     return Math.random() * (MAX - MIN) + MIN;
 }
+
+export function getDefenderHpKey(attackerIdentifier: ATTACKER):keyof Fighting{
+    return attackerIdentifier === ATTACKER.USER
+        ? 'pcPokemonHP'
+        : 'currentActivePokemonHP';
+  }

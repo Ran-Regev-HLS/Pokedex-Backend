@@ -16,8 +16,8 @@ export class FightingController {
       Logger.log(`Successfully created fight ${fight.id}`);
       return fight;
     } catch (error) {
-      Logger.error('Could not create fight', error.stack);
-      throw error;
+      Logger.error('Could not create fight', error);
+      throw new Error(error);
     }
   }
 
@@ -32,7 +32,8 @@ export class FightingController {
       Logger.log(`Successfully calculated attack with result ${fight.outcome}`)
       return fight;
     } catch (error) {
-      Logger.error('Could not calculate attack', error.stack);
+      Logger.error('Could not calculate attack', error);
+      throw new Error(error);
     }
   }
 }
