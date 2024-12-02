@@ -10,11 +10,11 @@ export class FightingController {
   constructor(private readonly fightingService: FightingService) {}
 
   @Post()
-  async create(): Promise<Fighting> {
+  async create(){
     Logger.log('Creating a new fight');
     try {  
       const fight = await this.fightingService.create();
-      Logger.log(`Successfully created fight ${fight.id}`);
+      Logger.log(`Successfully created fight ${fight}`);
       return fight;
     } catch (error) {
       Logger.error('Could not create fight', error);

@@ -30,7 +30,7 @@ export class FightingService {
     private readonly pokemonService: PokemonsService,
   ) {}
 
-  async create(): Promise<Fighting> {
+  async create() {
     const pcPokemon = await this.pokemonService.getRandomOpponent();
     if (!pcPokemon) {
       throw new NotFoundException('couldnt get an opponent pokemon');
@@ -56,7 +56,8 @@ export class FightingService {
       catchAttempts: MAX_CATCH_ATTEMPTS,
     };
 
-    return this.fightingRepository.create(data);
+    const fight =  await this.fightingRepository.create(data);
+    return this.fightingRepository.getCurrentFightData(fight._id);
   }
 
   async findAll(): Promise<Fighting[]> {
