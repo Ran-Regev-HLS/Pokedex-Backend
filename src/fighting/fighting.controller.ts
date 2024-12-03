@@ -55,7 +55,7 @@ export class FightingController {
   @Post(':id/switch-pokemon')
   async switchPokemon(
     @Param('id') fightId: string,
-    @Query() switchPokemonDto: SwitchPokemonDto,
+    @Body() switchPokemonDto: SwitchPokemonDto,
   ): Promise<Fighting> {
     Logger.log(`Switching active pokmon in fight ${fightId}`);
     try {
