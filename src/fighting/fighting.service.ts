@@ -14,7 +14,7 @@ import {
   MAX_CATCH_ATTEMPTS,
 } from './constants';
 import { PokemonsService } from 'src/pokemons/pokemons.service';
-import { AttackDto, SwitchPokemonDto } from './dtos/fighting.dto';
+import { AttackDto } from './dtos/Attack.dto';
 import {
   attemptCatch,
   calculateAttack,
@@ -22,6 +22,7 @@ import {
   getDefenderHpKey,
 } from './utils';
 import { ObjectId, Types } from 'mongoose';
+import { SwitchPokemonDto } from './dtos/SwitchPokeomn.dto';
 
 @Injectable()
 export class FightingService {

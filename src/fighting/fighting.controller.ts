@@ -1,9 +1,10 @@
-import { Controller, Post, Param, Logger, Query } from '@nestjs/common';
+import { Controller, Post, Param, Logger, Query, Body } from '@nestjs/common';
 import { FightingService } from './fighting.service';
 import { Fighting } from './schemas/fighting.schema';
 import { AttackOutcome, CatchOutcome } from './constants';
-import { AttackDto, SwitchPokemonDto } from './dtos/fighting.dto';
+import { AttackDto } from './dtos/Attack.dto';
 import { ObjectId } from 'mongoose';
+import { SwitchPokemonDto } from './dtos/SwitchPokeomn.dto';
 
 @Controller('fighting')
 export class FightingController {
@@ -25,7 +26,7 @@ export class FightingController {
   @Post(':id/attack')
   async attack(
     @Param('id') fightId: string,
-    @Query() attack: AttackDto,
+    @Body() attack: AttackDto,
   ): Promise<{fight:Fighting, outcome: AttackOutcome}> {
     Logger.log(`Processing attack for fight ${fightId}`)
     try {
@@ -55,7 +56,7 @@ export class FightingController {
   @Post(':id/switch-pokemon')
   async switchPokemon(
     @Param('id') fightId: string,
-    @Query() switchPokemonDto: SwitchPokemonDto,
+    @Body() switchPokemonDto: SwitchPokemonDto,
   ): Promise<Fighting> {
     Logger.log(`Switching active pokmon in fight ${fightId}`);
     try {
