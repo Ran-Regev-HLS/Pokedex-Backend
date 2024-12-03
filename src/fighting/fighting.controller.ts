@@ -1,4 +1,4 @@
-import { Controller, Post, Param, Logger, Query } from '@nestjs/common';
+import { Controller, Post, Param, Logger, Query, Body } from '@nestjs/common';
 import { FightingService } from './fighting.service';
 import { Fighting } from './schemas/fighting.schema';
 import { AttackOutcome, CatchOutcome } from './constants';
@@ -25,7 +25,7 @@ export class FightingController {
   @Post(':id/attack')
   async attack(
     @Param('id') fightId: string,
-    @Query() attack: AttackDto,
+    @Body() attack: AttackDto,
   ): Promise<{fight:Fighting, outcome: AttackOutcome}> {
     Logger.log(`Processing attack for fight ${fightId}`)
     try {
