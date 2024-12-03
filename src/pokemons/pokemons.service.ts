@@ -23,4 +23,8 @@ export class PokemonsService {
   findById(pokemonId: Types.ObjectId) {
     return this.pokemonRepo.findById(pokemonId);
   }
+
+  async setOwned(pokemonId: Types.ObjectId) {
+    return this.pokemonRepo.setOwned(pokemonId)
+  }
 }
