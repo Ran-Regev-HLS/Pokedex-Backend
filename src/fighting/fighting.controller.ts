@@ -25,7 +25,7 @@ export class FightingController {
   @Post(':id/attack')
   async attack(
     @Param('id') fightId: string,
-    @Query() attack: AttackDto,
+    @Body() attack: AttackDto,
   ): Promise<{fight:Fighting, outcome: AttackOutcome}> {
     Logger.log(`Processing attack for fight ${fightId}`)
     try {
