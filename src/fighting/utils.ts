@@ -89,19 +89,4 @@ export function attemptCatch(opponentHp: number, BaseHP: number): boolean {
   return randomValue <= catchRate;
 }
 
-export function pokemonUneededData(field: string) {
-  return {
-    [`${field}._id`]: 0,
-    [`${field}.weight`]: 0,
-    [`${field}.height`]: 0,
-    [`${field}.ability`]: 0,
-    [`${field}.isOwned`]: 0,
-    [`${field}.type`]: 0,
-    [`${field}.species`]: 0,
-    [`${field}.description`]: 0,
-    [`${field}.Defense`]: 0,
-    [`${field}.Speed`]: 0,
-    [`${field}.Sp`]: 0,
-    [`${field}.hp`]: 0,
-  };
-}
+
