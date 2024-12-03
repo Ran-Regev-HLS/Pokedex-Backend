@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Pokemon } from './schemas/pokemon.schema';
 import { PokemonRepository } from './pokemon.repository';
-import { FilterQuery, ObjectId } from 'mongoose';
+import { FilterQuery, Types } from 'mongoose';
 
 @Injectable()
 export class PokemonsService {
@@ -20,7 +20,7 @@ export class PokemonsService {
     return this.pokemonRepo.getRandomUnownedPokemon();
   }
 
-  findById(pokemonId: ObjectId) {
-    return this.findById(pokemonId);
+  findById(pokemonId: Types.ObjectId) {
+    return this.pokemonRepo.findById(pokemonId);
   }
 }

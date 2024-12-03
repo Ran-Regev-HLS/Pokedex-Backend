@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Param, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Logger, Query } from '@nestjs/common';
 import { FightingService } from './fighting.service';
 import { Fighting } from './schemas/fighting.schema';
 import { AttackOutcome, CatchOutcome } from './constants';
+import { AttackDto } from './dtos/fighting.dto';
+import { ObjectId } from 'mongoose';
 
 @Controller('fighting')
 export class FightingController {
@@ -15,7 +17,23 @@ export class FightingController {
       Logger.log(`Successfully created fight ${fight.id}`);
       return fight;
     } catch (error) {
-      Logger.error('Could not create fight', error.stack);
+      Logger.error('Could not create fight', error);
+      throw new Error(error);
+    }
+  }
+
+  @Post(':id/attack')
+  async attack(
+    @Param('id') fightId: string,
+    @Body() attack: AttackDto,
+  ): Promise<{fight:Fighting, outcome: AttackOutcome}> {
+    Logger.log(`Processing attack for fight ${fightId}`)
+    try {
+      const fight = await this.fightingService.processAttack(fightId,attack);
+      Logger.log(`Successfully calculated attack with result ${fight.outcome}`)
+      return fight;
+    } catch (error) {
+      Logger.error('Could not calculate attack', error);
       throw new Error(error);
     }
   }
