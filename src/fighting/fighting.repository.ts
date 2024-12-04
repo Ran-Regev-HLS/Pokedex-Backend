@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId, Types } from 'mongoose';
 import { Fighting } from './schemas/fighting.schema';
+import { pcPokemonStep, userPokemonMergeStep, userPokemonStep } from './fighting.aggregation';
+import { AggregatedFightingResult } from './types';
 
 @Injectable()
 export class FightingRepository {
@@ -32,4 +34,17 @@ export class FightingRepository {
   async remove(id: ObjectId): Promise<Fighting | null> {
     return this.fightingModel.findByIdAndDelete(id).lean<Fighting>();
   }
+
+  async getCurrentFightData(id: Types.ObjectId){
+    const pipeline = [
+      ...pcPokemonStep(id),
+      ...userPokemonStep,
+      ...userPokemonMergeStep,
+      
+    ];
+    const result = await this.fightingModel.aggregate<AggregatedFightingResult>(pipeline);
+    return result.length > 0 ? result[0] : null;
+  }
+
+  
 }

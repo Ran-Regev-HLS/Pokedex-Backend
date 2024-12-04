@@ -47,3 +47,4 @@ export enum CatchOutcome {
     MISSED = "MISSED",
     FLED = "FLED"
 }
+

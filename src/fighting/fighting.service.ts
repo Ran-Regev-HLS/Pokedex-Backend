@@ -14,14 +14,14 @@ import {
   MAX_CATCH_ATTEMPTS,
 } from './constants';
 import { PokemonsService } from 'src/pokemons/pokemons.service';
-import { AttackDto, SwitchPokemonDto } from './dtos/fighting.dto';
+import { AttackDto } from './dtos/Attack.dto';
 import {
   attemptCatch,
   calculateAttack,
   getAttackerId,
   getDefenderHpKey,
 } from './utils';
-import { ObjectId, Types } from 'mongoose';
+import { SwitchPokemonDto } from './dtos/SwitchPokeomn.dto';
 
 @Injectable()
 export class FightingService {
@@ -30,7 +30,7 @@ export class FightingService {
     private readonly pokemonService: PokemonsService,
   ) {}
 
-  async create(): Promise<Fighting> {
+  async create() {
     const pcPokemon = await this.pokemonService.getRandomOpponent();
     if (!pcPokemon) {
       throw new NotFoundException('couldnt get an opponent pokemon');
@@ -56,7 +56,9 @@ export class FightingService {
       catchAttempts: MAX_CATCH_ATTEMPTS,
     };
 
-    return this.fightingRepository.create(data);
+    const fight =  await this.fightingRepository.create(data);
+    const aggregatedFightData = await this.fightingRepository.getCurrentFightData(fight._id);
+    return aggregatedFightData;
   }
 
   async findAll(): Promise<Fighting[]> {
