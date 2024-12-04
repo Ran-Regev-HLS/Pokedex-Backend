@@ -31,6 +31,9 @@ export class Fighting extends Document {
   @Prop()
   catchAttempts: number;
 
+  @Prop()
+  userTurn: Boolean;
+
   readonly _id:Types.ObjectId;
 }
 

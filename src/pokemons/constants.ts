@@ -1,6 +1,6 @@
 export const SORT_FIELD_MAPPING: Record<string, string> = {
     hp: 'hp',
-    attack: 'Attack',
+    Attack: 'Attack',
     name: 'name',
   };
   

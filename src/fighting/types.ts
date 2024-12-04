@@ -5,6 +5,7 @@ interface PokemonData {
     name: string;
     image: string;
     hp: number;
+    Attack: number;
   }
   
   interface UserPokemon {
@@ -24,5 +25,6 @@ interface PokemonData {
     catchAttempts: number;
     pcPokemonData: PokemonData;
     currentActivePokemonData: PokemonData;
+    userTurn: boolean;
   }
   

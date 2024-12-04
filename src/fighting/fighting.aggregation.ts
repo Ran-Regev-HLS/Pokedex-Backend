@@ -7,6 +7,7 @@ const fightingAggregationProjection = {
     currentActivePokemonHP: 1,
     status: 1,
     catchAttempts: 1,
+    userTurn:1, 
     "userPokemons.pokemonId": 1,
     "userPokemons.hp": 1,
     ...pokemonProjectionData("userPokemons.pokemonData"),
@@ -19,7 +20,7 @@ export function pokemonProjectionData(field: string) {
     [`${field}.name`]: 1,
     [`${field}.image`]: 1,
     [`${field}.id`]: 1,
-    [`${field}.attack`]: 1,
+    [`${field}.Attack`]: 1,
     [`${field}.hp`]: 1,
   };
 }
