@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { profile } from 'console';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, ObjectId, Types } from 'mongoose';
 import { Pokemon } from 'src/pokemons/schemas/pokemon.schema';
 
 @Injectable()
@@ -12,9 +11,9 @@ export class PokemonRepository {
 
   async findWithFilters(
     filters: FilterQuery<Pokemon>,
-    sort: Record<string, 1 | -1>,
-    startIndex: number,
-    limit: number,
+    sort?: Record<string, 1 | -1>,
+    startIndex?: number,
+    limit?: number,
   ): Promise<{ data: Pokemon[]; total: number }> {
     const total = await this.pokemonModel.countDocuments(filters).exec();
     const data = await this.pokemonModel
@@ -35,4 +34,10 @@ export class PokemonRepository {
     return result[0] || null;
   }
 
+  async findById(pokemonId: Types.ObjectId): Promise<Pokemon | null> {
+    return this.pokemonModel.findById(pokemonId);
+  }
+  async setOwned(beingCatchedId: ObjectId) {
+    return this.pokemonModel.findByIdAndUpdate(beingCatchedId,{isOwned: true}, { new: true })
+  }
 }

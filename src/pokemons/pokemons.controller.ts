@@ -56,6 +56,7 @@ export class PokemonsController {
   async findRandomOpponent() {
     const opponent = await this.pokemonsService.getRandomOpponent();
     if (!opponent) {
+      Logger.error('No unowned Pokemon found');
       throw new NotFoundException('No unowned Pokemon found');
     }
     return opponent;
