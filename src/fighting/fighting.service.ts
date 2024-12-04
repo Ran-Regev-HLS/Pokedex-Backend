@@ -22,6 +22,7 @@ import {
   getDefenderHpKey,
 } from './utils';
 import { SwitchPokemonDto } from './dtos/SwitchPokeomn.dto';
+import { AggregatedFightingResult } from './types';
 
 @Injectable()
 export class FightingService {
@@ -45,6 +46,7 @@ export class FightingService {
     for (const pokemon of userPokemons.data) {
       userPokemonsId.push({ pokemonId: pokemon._id, hp: pokemon.hp });
     }
+    const userTurn = userPokemons.data[0].Speed > pcPokemon.Speed;
 
     const data: Partial<Fighting> = {
       pcPokemonId: pcPokemon._id,
@@ -54,6 +56,7 @@ export class FightingService {
       currentActivePokemonHP: userPokemonsId[0].hp,
       status: FightStatus.PRE_FIGHT,
       catchAttempts: MAX_CATCH_ATTEMPTS,
+      userTurn: userTurn,
     };
 
     const fight =  await this.fightingRepository.create(data);
@@ -180,7 +183,7 @@ export class FightingService {
   async switchActivePokemon(
     fightId: string,
     switchPokemonDto: SwitchPokemonDto,
-  ): Promise<Fighting> {
+  ): Promise<AggregatedFightingResult> {
     const { newPokemonId } = switchPokemonDto;
 
     const currBattle = await this.fightingRepository.findOne(fightId);
@@ -213,6 +216,8 @@ export class FightingService {
     currBattle.currentActivePokemonId = pokemonToSwitchTo.pokemonId;
     currBattle.currentActivePokemonHP = pokemonToSwitchTo.hp;
 
-    return await this.fightingRepository.update(fightId, currBattle);
+    const fight =  await this.fightingRepository.update(fightId, currBattle);
+    const aggregatedFightData = await this.fightingRepository.getCurrentFightData(fight._id);
+    return aggregatedFightData;
   }
 }
