@@ -25,7 +25,7 @@ export class Fighting extends Document {
   currentActivePokemonHP: number;
 
   @Prop()
-  status: string;
+  status: FightStatus;
 
   @Prop()
   catchAttempts: number;

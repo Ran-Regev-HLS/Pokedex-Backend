@@ -37,7 +37,7 @@ export class PokemonRepository {
   async findById(pokemonId: Types.ObjectId): Promise<Pokemon | null> {
     return this.pokemonModel.findById(pokemonId);
   }
-  async setOwned(beingCatchedId: ObjectId) {
+  async setOwned(beingCatchedId: Types.ObjectId) {
     return this.pokemonModel.findByIdAndUpdate(beingCatchedId,{isOwned: true}, { new: true })
   }
 }

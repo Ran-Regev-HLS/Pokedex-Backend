@@ -54,3 +54,21 @@ export function getDefenderHpKey(attackerIdentifier: ATTACKER):keyof Fighting{
   export function getAttackerId(isAttackerPC:boolean, fight: Fighting):Types.ObjectId{
    return isAttackerPC ? fight.pcPokemonId : fight.currentActivePokemonId;
   }
+
+
+
+
+function calculateCatchRate(currentHP: number, BaseHP: number): number {
+    let catchRate = BASE_CATCH_RATE;
+    if(currentHP < LOW_HP_RATION_THRESHOLD * BaseHP){
+        catchRate += LOW_HP_CATCH_RATE_BONUS;
+    }
+    return Math.min(catchRate, 1); 
+}
+
+export function attemptCatch(opponentHp: number, BaseHP: number): boolean{
+    const randomValue = Math.random();
+    const catchRate = calculateCatchRate(opponentHp,BaseHP);
+    return randomValue <= catchRate ;
+}
+
