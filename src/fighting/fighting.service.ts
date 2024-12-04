@@ -21,7 +21,6 @@ import {
   getAttackerId,
   getDefenderHpKey,
 } from './utils';
-import { ObjectId, Types } from 'mongoose';
 import { SwitchPokemonDto } from './dtos/SwitchPokeomn.dto';
 
 @Injectable()
@@ -58,7 +57,8 @@ export class FightingService {
     };
 
     const fight =  await this.fightingRepository.create(data);
-    return this.fightingRepository.getCurrentFightData(fight._id);
+    const aggregatedFightData = await this.fightingRepository.getCurrentFightData(fight._id);
+    return aggregatedFightData;
   }
 
   async findAll(): Promise<Fighting[]> {

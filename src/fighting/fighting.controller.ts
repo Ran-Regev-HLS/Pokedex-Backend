@@ -3,7 +3,6 @@ import { FightingService } from './fighting.service';
 import { Fighting } from './schemas/fighting.schema';
 import { AttackOutcome, CatchOutcome } from './constants';
 import { AttackDto } from './dtos/Attack.dto';
-import { ObjectId } from 'mongoose';
 import { SwitchPokemonDto } from './dtos/SwitchPokeomn.dto';
 
 @Controller('fighting')
@@ -15,7 +14,7 @@ export class FightingController {
     Logger.log('Creating a new fight');
     try {  
       const fight = await this.fightingService.create();
-      Logger.log(`Successfully created fight ${fight}`);
+      Logger.log(`Successfully created fight ${fight._id}`);
       return fight;
     } catch (error) {
       Logger.error('Could not create fight', error);
@@ -64,7 +63,7 @@ export class FightingController {
       Logger.log(`Successfully switched pokemon for fight ${fightId}`);
       return updatedFight;
     } catch (error) {
-      Logger.error('Could not switch active pokemon', error.stack);
+      Logger.error('Could not switch active pokemon', error);
       throw error;
     }
   }
