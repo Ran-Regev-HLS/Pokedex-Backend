@@ -76,7 +76,7 @@ export class FightingService {
   async processAttack(
     fightId: string,
     attackDto: AttackDto,
-  ): Promise<{ fight: Fighting; outcome: AttackOutcome; damageDealt: number }> {
+  ): Promise<{ fight: AggregatedFightingResult; outcome: AttackOutcome; damageDealt: number }> {
     const { attacker: attackerIdentifier } = attackDto;
 
     const currBattle = await this.fightingRepository.findOne(fightId);
@@ -127,10 +127,12 @@ export class FightingService {
     } else {
       updates.status = FightStatus.IN_FIGHT;
     }
-    const updatedFight = await this.fightingRepository.update(fightId, updates);
+
+    const fight =  await this.fightingRepository.update(fightId, updates);
+    const aggregatedFightData = await this.fightingRepository.getCurrentFightData(fight._id);
 
     return {
-      fight: updatedFight,
+      fight: aggregatedFightData,
       outcome: attackOutcome,
       damageDealt: damageDealt,
     };
@@ -138,7 +140,7 @@ export class FightingService {
 
   async processCatch(
     fightId: string,
-  ): Promise<{ fight: Fighting; outcome: CatchOutcome }> {
+  ): Promise<{ fight: AggregatedFightingResult; outcome: CatchOutcome }> {
     const currBattle = await this.fightingRepository.findOne(fightId);
     if (!currBattle) {
       throw new NotFoundException(`Fight with ID ${fightId} not found`);
@@ -175,9 +177,9 @@ export class FightingService {
       catchOutcome = CatchOutcome.MISSED;
     }
 
-    const updatedFight = await this.fightingRepository.update(fightId, updates);
-
-    return { fight: updatedFight, outcome: catchOutcome };
+    const fight =  await this.fightingRepository.update(fightId, updates);
+    const aggregatedFightData = await this.fightingRepository.getCurrentFightData(fight._id);
+    return { fight: aggregatedFightData, outcome: catchOutcome };
   }
 
   async switchActivePokemon(

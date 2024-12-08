@@ -27,7 +27,7 @@ export class FightingController {
   async attack(
     @Param('id') fightId: string,
     @Body() attack: AttackDto,
-  ): Promise<{fight:Fighting, outcome: AttackOutcome}> {
+  ): Promise<{fight:AggregatedFightingResult, outcome: AttackOutcome}> {
     Logger.log(`Processing attack for fight ${fightId}`)
     try {
       const fight = await this.fightingService.processAttack(fightId,attack);
@@ -42,7 +42,7 @@ export class FightingController {
   @Post(':id/catch')
   async catch(
     @Param('id') fightId: string,
-  ): Promise<{fight:Fighting, outcome: CatchOutcome}> {
+  ): Promise<{fight:AggregatedFightingResult, outcome: CatchOutcome}> {
     Logger.log(`Processing catch for fight ${fightId}`)
     try {
       const fight = await this.fightingService.processCatch(fightId);
