@@ -73,13 +73,26 @@ export const userPokemonMergeStep = [
     $addFields: {
       userPokemons: {
         $map: {
-          input: { $range: [0, { $size: '$userPokemons' }] },
-          as: 'index',
+          input: '$userPokemons',
+          as: 'userPokemon',
           in: {
             $mergeObjects: [
-              { $arrayElemAt: ['$userPokemons', '$$index'] },
+              '$$userPokemon',
               {
-                pokemonData: { $arrayElemAt: ['$userPokemonsData', '$$index'] },
+                pokemonData: {
+                  $arrayElemAt: [
+                    {
+                      $filter: {
+                        input: '$userPokemonsData',
+                        as: 'pokemonData',
+                        cond: {
+                          $eq: ['$$pokemonData._id', '$$userPokemon.pokemonId'],
+                        },
+                      },
+                    },
+                    0,
+                  ],
+                },
               },
             ],
           },
