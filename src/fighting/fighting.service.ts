@@ -18,11 +18,13 @@ import { AttackDto } from './dtos/Attack.dto';
 import {
   attemptCatch,
   calculateAttack,
+  checkPossibleSwitch,
   getAttackerId,
   getDefenderHpKey,
 } from './utils';
 import { SwitchPokemonDto } from './dtos/SwitchPokeomn.dto';
 import { AggregatedFightingResult } from './types';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class FightingService {
@@ -121,9 +123,13 @@ export class FightingService {
 
     const updates: Partial<Fighting> = { [defenderHpKey]: newDefenderHp };
     if (newDefenderHp === 0) {
-      attackerIdentifier === ATTACKER.USER
-        ? (updates.status = FightStatus.WON)
-        : (updates.status = FightStatus.LOST);
+      if(attackerIdentifier === ATTACKER.USER){
+        (updates.status = FightStatus.WON)
+      }
+      else{
+        checkPossibleSwitch(currBattle.userPokemons, currBattle.currentActivePokemonId) ? (updates.status = FightStatus.SWITCH_NEEDED)
+       : (updates.status = FightStatus.LOST);
+      }
     } else {
       updates.status = FightStatus.IN_FIGHT;
     }
@@ -217,9 +223,14 @@ export class FightingService {
 
     currBattle.currentActivePokemonId = pokemonToSwitchTo.pokemonId;
     currBattle.currentActivePokemonHP = pokemonToSwitchTo.hp;
+    if(currBattle.status === FightStatus.SWITCH_NEEDED){
+      currBattle.status = FightStatus.IN_FIGHT;
+    }
 
     const fight =  await this.fightingRepository.update(fightId, currBattle);
     const aggregatedFightData = await this.fightingRepository.getCurrentFightData(fight._id);
     return aggregatedFightData;
   }
 }
+
+

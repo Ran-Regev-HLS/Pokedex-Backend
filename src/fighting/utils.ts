@@ -126,6 +126,10 @@ function getTypeEffectivenessMultiplier(
     return multiplier;
 }
 
-
+export function checkPossibleSwitch(userPokemons: Array<{ pokemonId: Types.ObjectId; hp: number }>, currentActivePokemonId: Types.ObjectId):boolean {
+  return userPokemons.some(pokemon => 
+    !pokemon.pokemonId.equals(currentActivePokemonId) && pokemon.hp > 0
+  );
+}
 
 
