@@ -180,6 +180,7 @@ export class FightingService {
       updates.status = FightStatus.FLED;
       catchOutcome = CatchOutcome.FLED;
     } else {
+      updates.status = FightStatus.IN_FIGHT;
       catchOutcome = CatchOutcome.MISSED;
     }
 
