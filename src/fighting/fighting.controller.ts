@@ -4,6 +4,7 @@ import { Fighting } from './schemas/fighting.schema';
 import { AttackOutcome, CatchOutcome } from './constants';
 import { AttackDto } from './dtos/Attack.dto';
 import { SwitchPokemonDto } from './dtos/SwitchPokeomn.dto';
+import { AggregatedFightingResult } from './types';
 
 @Controller('fighting')
 export class FightingController {
@@ -26,7 +27,7 @@ export class FightingController {
   async attack(
     @Param('id') fightId: string,
     @Body() attack: AttackDto,
-  ): Promise<{fight:Fighting, outcome: AttackOutcome}> {
+  ): Promise<{fight:AggregatedFightingResult, outcome: AttackOutcome}> {
     Logger.log(`Processing attack for fight ${fightId}`)
     try {
       const fight = await this.fightingService.processAttack(fightId,attack);
@@ -41,7 +42,7 @@ export class FightingController {
   @Post(':id/catch')
   async catch(
     @Param('id') fightId: string,
-  ): Promise<{fight:Fighting, outcome: CatchOutcome}> {
+  ): Promise<{fight:AggregatedFightingResult, outcome: CatchOutcome}> {
     Logger.log(`Processing catch for fight ${fightId}`)
     try {
       const fight = await this.fightingService.processCatch(fightId);
@@ -56,7 +57,7 @@ export class FightingController {
   async switchPokemon(
     @Param('id') fightId: string,
     @Body() switchPokemonDto: SwitchPokemonDto,
-  ): Promise<Fighting> {
+  ): Promise<AggregatedFightingResult> {
     Logger.log(`Switching active pokmon in fight ${fightId}`);
     try {
       const updatedFight = await this.fightingService.switchActivePokemon(fightId, switchPokemonDto);

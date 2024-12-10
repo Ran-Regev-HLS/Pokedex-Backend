@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { FightStatus } from "./constants";
 
 interface PokemonData {
@@ -5,6 +6,7 @@ interface PokemonData {
     name: string;
     image: string;
     hp: number;
+    Attack: number;
   }
   
   interface UserPokemon {
@@ -24,5 +26,10 @@ interface PokemonData {
     catchAttempts: number;
     pcPokemonData: PokemonData;
     currentActivePokemonData: PokemonData;
+    userTurn: boolean;
   }
   
+  export type checkPossibleSwitchProps = {
+    userPokemons: { pokemonId: Types.ObjectId; hp: number }[];
+    currentActivePokemonId: Types.ObjectId;
+  };
