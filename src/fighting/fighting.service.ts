@@ -61,8 +61,9 @@ export class FightingService {
       userTurn: userTurn,
     };
 
-    const fight =  await this.fightingRepository.create(data);
-    const aggregatedFightData = await this.fightingRepository.getCurrentFightData(fight._id);
+    const fight = await this.fightingRepository.create(data);
+    const aggregatedFightData =
+      await this.fightingRepository.getCurrentFightData(fight._id);
     return aggregatedFightData;
   }
 
@@ -78,7 +79,11 @@ export class FightingService {
   async processAttack(
     fightId: string,
     attackDto: AttackDto,
-  ): Promise<{ fight: AggregatedFightingResult; outcome: AttackOutcome; damageDealt: number }> {
+  ): Promise<{
+    fight: AggregatedFightingResult;
+    outcome: AttackOutcome;
+    damageDealt: number;
+  }> {
     const { attacker: attackerIdentifier } = attackDto;
 
     const currBattle = await this.fightingRepository.findOne(fightId);
@@ -123,19 +128,23 @@ export class FightingService {
 
     const updates: Partial<Fighting> = { [defenderHpKey]: newDefenderHp };
     if (newDefenderHp === 0) {
-      if(attackerIdentifier === ATTACKER.USER){
-        (updates.status = FightStatus.WON)
-      }
-      else{
-        checkPossibleSwitch(currBattle.userPokemons, currBattle.currentActivePokemonId) ? (updates.status = FightStatus.SWITCH_NEEDED)
-       : (updates.status = FightStatus.LOST);
+      if (attackerIdentifier === ATTACKER.USER) {
+        updates.status = FightStatus.WON;
+      } else {
+        checkPossibleSwitch({
+          userPokemons: currBattle.userPokemons,
+          currentActivePokemonId: currBattle.currentActivePokemonId,
+        })
+          ? (updates.status = FightStatus.SWITCH_NEEDED)
+          : (updates.status = FightStatus.LOST);
       }
     } else {
       updates.status = FightStatus.IN_FIGHT;
     }
 
-    const fight =  await this.fightingRepository.update(fightId, updates);
-    const aggregatedFightData = await this.fightingRepository.getCurrentFightData(fight._id);
+    const fight = await this.fightingRepository.update(fightId, updates);
+    const aggregatedFightData =
+      await this.fightingRepository.getCurrentFightData(fight._id);
 
     return {
       fight: aggregatedFightData,
@@ -184,8 +193,9 @@ export class FightingService {
       catchOutcome = CatchOutcome.MISSED;
     }
 
-    const fight =  await this.fightingRepository.update(fightId, updates);
-    const aggregatedFightData = await this.fightingRepository.getCurrentFightData(fight._id);
+    const fight = await this.fightingRepository.update(fightId, updates);
+    const aggregatedFightData =
+      await this.fightingRepository.getCurrentFightData(fight._id);
     return { fight: aggregatedFightData, outcome: catchOutcome };
   }
 
@@ -203,8 +213,8 @@ export class FightingService {
       throw new BadRequestException(`Fight with ID ${fightId} is not ongoing`);
     }
 
-    const pokemonToSwitchTo = currBattle.userPokemons.find(
-      (p) => p.pokemonId.equals(newPokemonId),
+    const pokemonToSwitchTo = currBattle.userPokemons.find((p) =>
+      p.pokemonId.equals(newPokemonId),
     );
     if (!pokemonToSwitchTo) {
       throw new BadRequestException(
@@ -224,14 +234,13 @@ export class FightingService {
 
     currBattle.currentActivePokemonId = pokemonToSwitchTo.pokemonId;
     currBattle.currentActivePokemonHP = pokemonToSwitchTo.hp;
-    if(currBattle.status === FightStatus.SWITCH_NEEDED){
+    if (currBattle.status === FightStatus.SWITCH_NEEDED) {
       currBattle.status = FightStatus.IN_FIGHT;
     }
 
-    const fight =  await this.fightingRepository.update(fightId, currBattle);
-    const aggregatedFightData = await this.fightingRepository.getCurrentFightData(fight._id);
+    const fight = await this.fightingRepository.update(fightId, currBattle);
+    const aggregatedFightData =
+      await this.fightingRepository.getCurrentFightData(fight._id);
     return aggregatedFightData;
   }
 }
-
-
