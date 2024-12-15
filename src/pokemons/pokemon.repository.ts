@@ -16,9 +16,13 @@ export class PokemonRepository {
     limit?: number,
   ): Promise<{ data: Pokemon[]; total: number }> {
     const total = await this.pokemonModel.countDocuments(filters).exec();
+
+    const defaultSort: Record<string, 1 | -1> = { _id: 1 };
+    const finalSort = sort ? { ...sort, ...defaultSort } : defaultSort;
+
     const data = await this.pokemonModel
       .find(filters)
-      .sort(sort)
+      .sort(finalSort)
       .skip(startIndex)
       .limit(limit)
       .lean<Pokemon[]>();
